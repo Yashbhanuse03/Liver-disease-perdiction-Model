@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="card-title text-center">About the Liver Disease Prediction System</h2>
+            </div>
+            <div class="card-body">
+                <h3>Overview</h3>
+                <p>
+                    The Liver Disease Prediction System is a machine learning-based application designed to predict the likelihood of liver disease based on various medical parameters. This system uses a trained model to analyze patient data and provide a prediction of whether the patient may have liver disease.
+                </p>
+                
+                <h3>How It Works</h3>
+                <p>
+                    The system uses a machine learning model trained on the Indian Liver Patient Dataset (ILPD). The model analyzes the following parameters:
+                </p>
+                <ul>
+                    <li>Age and Gender</li>
+                    <li>Bilirubin levels (Total and Direct)</li>
+                    <li>Enzyme levels (Alkaline Phosphotase, Alamine Aminotransferase, Aspartate Aminotransferase)</li>
+                    <li>Protein levels (Total Proteins, Albumin)</li>
+                    <li>Albumin and Globulin Ratio</li>
+                </ul>
+                <p>
+                    Based on these parameters, the model calculates the probability of liver disease and provides a prediction.
+                </p>
+                
+                <h3>Model Performance</h3>
+                <p>
+                    The prediction model has been trained and evaluated on a dataset of liver patients. The model achieves:
+                </p>
+                <ul>
+                    <li>Accuracy: ~69%</li>
+                    <li>Precision: ~73% for detecting no disease</li>
+                    <li>Recall: ~90% for detecting no disease</li>
+                </ul>
+                <p>
+                    <strong>Important Note:</strong> This system is intended for educational and informational purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.
+                </p>
+                
+                <h3>About Liver Disease</h3>
+                <p>
+                    Liver disease refers to any condition that damages the liver and affects its function. The liver is responsible for many critical functions within the body, including:
+                </p>
+                <ul>
+                    <li>Filtering the blood</li>
+                    <li>Processing nutrients, medications, and hormones</li>
+                    <li>Producing bile to help digest fats</li>
+                    <li>Storing vitamins and minerals</li>
+                    <li>Removing toxins from the body</li>
+                </ul>
+                <p>
+                    Common types of liver disease include hepatitis, fatty liver disease, cirrhosis, and liver cancer. Early detection and treatment of liver disease can help prevent progression to more serious conditions.
+                </p>
+                
+                <h3>Risk Factors for Liver Disease</h3>
+                <p>
+                    Several factors can increase the risk of developing liver disease:
+                </p>
+                <ul>
+                    <li>Heavy alcohol consumption</li>
+                    <li>Obesity</li>
+                    <li>Type 2 diabetes</li>
+                    <li>Viral infections (hepatitis A, B, C)</li>
+                    <li>Exposure to certain chemicals or toxins</li>
+                    <li>Family history of liver disease</li>
+                </ul>
+                
+                <div class="alert alert-info mt-4">
+                    <p>
+                        <strong>Disclaimer:</strong> This prediction system provides an estimate based on statistical models and should not be used as a definitive diagnostic tool. Always consult with a healthcare professional for proper diagnosis and treatment.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

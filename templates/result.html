@@ -1,0 +1,177 @@
+{% extends "layout.html" %}
+
+{% block title %}Prediction Result{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header {% if result.prediction == 'Liver Disease' %}bg-danger{% else %}bg-success{% endif %} text-white">
+                <h2 class="card-title text-center">Prediction Result</h2>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <h3>Prediction: <strong>{{ result.prediction|default('Unknown') }}</strong></h3>
+
+                    {% if result.prediction == 'Liver Disease' and result.severity is defined %}
+                    <div class="mt-3 mb-2">
+                        <h4 class="text-danger">Liver Severity: <strong>{{ result.severity }}</strong></h4>
+                    </div>
+                    {% endif %}
+
+                    <div class="progress mt-3 mb-3">
+                        <div class="progress-bar {% if result.prediction == 'Liver Disease' %}bg-danger{% else %}bg-success{% endif %}"
+                             role="progressbar"
+                             style="width: {{ result.probability|default(0) }}%;"
+                             aria-valuenow="{{ result.probability|default(0) }}"
+                             aria-valuemin="0"
+                             aria-valuemax="100">
+                            {{ result.probability|default(0) }}%
+                        </div>
+                    </div>
+                    <p class="lead">Probability of Liver Disease: <strong>{{ result.probability|default(0) }}%</strong></p>
+                </div>
+
+                <div class="alert {% if result.prediction == 'Liver Disease' %}alert-danger{% else %}alert-success{% endif %}">
+                    {% if result.prediction == 'Liver Disease' %}
+                    <p><strong>Important:</strong> This prediction suggests a risk of liver disease. Please consult with a healthcare professional for proper diagnosis and treatment.</p>
+                    {% else %}
+                    <p><strong>Good news:</strong> Based on the provided parameters, the model predicts a low risk of liver disease. However, this is not a medical diagnosis. Regular check-ups are still recommended.</p>
+                    {% endif %}
+                </div>
+
+                <div class="card mt-4 mb-4">
+                    <div class="card-header {% if result.risk_factors is defined and result.risk_factors %}bg-warning text-dark{% else %}bg-info text-white{% endif %}">
+                        <h4 class="mb-0">{% if result.risk_factors is defined and result.risk_factors %}Identified Risk Factors{% else %}Risk Factor Analysis{% endif %}</h4>
+                    </div>
+                    <div class="card-body">
+                        {% if result.risk_factors is defined and result.risk_factors %}
+                        <ul class="list-group">
+                            {% for factor in result.risk_factors %}
+                            <li class="list-group-item list-group-item-warning">{{ factor }}</li>
+                            {% endfor %}
+                        </ul>
+                        <div class="mt-3">
+                            <p><strong>Note:</strong> These risk factors are based on standard medical reference ranges and may indicate potential liver issues. Consult with a healthcare professional for proper interpretation.</p>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-success">
+                            <p><strong>Good news!</strong> No significant risk factors were identified based on the standard medical reference ranges.</p>
+                            <p>All your test values appear to be within normal ranges. However, this is not a medical diagnosis. Regular check-ups are still recommended.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if result.prediction == 'Liver Disease' and result.severity is defined %}
+                <div class="card mt-4 mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="mb-0">Liver Severity Assessment</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="severity-indicator {% if result.severity == 'Mild Risk' %}active{% endif %}">
+                                    <h5>Mild Risk</h5>
+                                    <p>Probability &lt; 40%</p>
+                                    <div class="severity-circle bg-warning"></div>
+                                    <p class="small">Early signs of potential liver issues. Lifestyle changes recommended.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="severity-indicator {% if result.severity == 'Moderate Risk' %}active{% endif %}">
+                                    <h5>Moderate Risk</h5>
+                                    <p>Probability 40-70%</p>
+                                    <div class="severity-circle bg-orange"></div>
+                                    <p class="small">Significant risk of liver disease. Medical consultation advised.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="severity-indicator {% if result.severity == 'High Risk' %}active{% endif %}">
+                                    <h5>High Risk</h5>
+                                    <p>Probability &gt; 70%</p>
+                                    <div class="severity-circle bg-danger"></div>
+                                    <p class="small">High likelihood of liver disease. Immediate medical attention recommended.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <p><strong>Note:</strong> This severity assessment is based on the model's prediction probability and should be used only as a general guide. Always consult with a healthcare professional for proper diagnosis and treatment.</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <h4 class="mt-4">Patient Information</h4>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Value</th>
+                                <th>Normal Range</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Age</td>
+                                <td>{{ result.patient_data.Age|default('-') }}</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Gender</td>
+                                <td>{{ result.patient_data.Gender|default('-') }}</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Total Bilirubin</td>
+                                <td>{{ result.patient_data.Total_Bilirubin|default('-') }}</td>
+                                <td>0.1-1.2 mg/dL</td>
+                            </tr>
+                            <tr>
+                                <td>Direct Bilirubin</td>
+                                <td>{{ result.patient_data.Direct_Bilirubin|default('-') }}</td>
+                                <td>0-0.3 mg/dL</td>
+                            </tr>
+                            <tr>
+                                <td>Alkaline Phosphotase</td>
+                                <td>{{ result.patient_data.Alkaline_Phosphotase|default('-') }}</td>
+                                <td>44-147 IU/L</td>
+                            </tr>
+                            <tr>
+                                <td>Alamine Aminotransferase</td>
+                                <td>{{ result.patient_data.Alamine_Aminotransferase|default('-') }}</td>
+                                <td>7-55 IU/L</td>
+                            </tr>
+                            <tr>
+                                <td>Aspartate Aminotransferase</td>
+                                <td>{{ result.patient_data.Aspartate_Aminotransferase|default('-') }}</td>
+                                <td>8-48 IU/L</td>
+                            </tr>
+                            <tr>
+                                <td>Total Proteins</td>
+                                <td>{% if result.patient_data.Total_Protiens is defined %}{{ result.patient_data.Total_Protiens }}{% else %}{{ result.patient_data.Total_Proteins|default('-') }}{% endif %}</td>
+                                <td>6.0-8.3 g/dL</td>
+                            </tr>
+                            <tr>
+                                <td>Albumin</td>
+                                <td>{{ result.patient_data.Albumin|default('-') }}</td>
+                                <td>3.5-5.0 g/dL</td>
+                            </tr>
+                            <tr>
+                                <td>Albumin and Globulin Ratio</td>
+                                <td>{{ result.patient_data.Albumin_and_Globulin_Ratio|default('-') }}</td>
+                                <td>1.0-2.5</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">Make Another Prediction</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
